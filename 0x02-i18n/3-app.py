@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""A Basic Flask app with internationalization support.
+"""
+0. Basic Flask app
 """
 from flask_babel import Babel
 from flask import Flask, render_template, request
@@ -15,7 +16,6 @@ class Config:
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.url_map.strict_slashes = False
 babel = Babel(app)
 
 
@@ -26,12 +26,14 @@ def get_locale() -> str:
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
-@app.route('/')
-def get_index() -> str:
-    """The home/index page.
-    """
-    return render_template('3-index.html')
+@app.route("/", strict_slashes=False)
+def home_page():
+    """Displays the index page"""
+    try:
+        return render_template("3-index.html")
+    except ValueError:
+        pass
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
